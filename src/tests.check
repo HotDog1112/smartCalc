@@ -1,0 +1,353 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "s21_calc_polish.h"
+#include <limits.h>
+
+
+
+#test arif_1
+    char *str;
+    str = "10+20+30-21=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 39.0, S21_EPS);
+
+
+#test arif_2
+    char *str;
+    str = "-12323-(30-0.0)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -12353, S21_EPS);
+
+#test arif_3
+    char *str;
+    str = "12+54-321/32-(21-2)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 36.96875, S21_EPS);
+
+
+#test arif_4
+    char *str;
+    str = "1.54-323.00/3 + 234*(-21-3)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -5722.126667, S21_EPS);
+
+#test arif_5
+    char *str;
+    str = "231-432/0=";
+    double x = 0.0;
+    ck_assert_int_eq((int)startCalc(str, x), (int)-INFINITY);
+
+
+#test arif_6
+    char *str;
+    str = "1*2/3*4/5*6/7*9/10=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.411429, S21_EPS);
+
+#test arif_7
+    char *str;
+    str = "43232/6653-214-(-323+0.0002)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 115.497921, S21_EPS);
+
+
+#test arif_8
+    char *str;
+    str = "231-43mod42+0.54-(-32*3.213)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 333.356, S21_EPS);
+
+#test arif_9
+    char *str;
+    str = "11-(123124.0001+(42-32.327)-32)*423/432=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -120526.054910, S21_EPS);
+
+#test arif_10
+    char *str;
+    str = "32mod(32-30)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+
+#test arif_11
+    char *str;
+    str = "12-32*(2143-312*(4-5)-1.32/(83.2/3))=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -78546.476923, S21_EPS);
+
+
+#test arif_12
+    char *str;
+    str = "511*0+(-32.02)-(-43)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 10.980000, S21_EPS);
+
+#test arif_13
+    char *str;
+    str = "0+0-0*0-0.02=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -0.020000, S21_EPS);
+
+#test arif_14
+    char *str;
+    str = "3+43.3.2=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test arif_15
+    char *str;
+    str = "3^9-4^(-2)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 19682.9375, S21_EPS);
+
+#test arif_16
+    char *str;
+    str = "(0.2=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test arif_17
+    char *str;
+    str = "(3-43^3-(-3*5))/54^0.001=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -79172.551221, S21_EPS);
+
+#test func_1
+    char *str;
+    str = "sin(2+43)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.850904, S21_EPS);
+
+#test func_2
+    char *str;
+    str = "cos(34-23)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.004426, S21_EPS);
+
+#test func_3
+    char *str;
+    str = "tan(89)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 1.685825, S21_EPS);
+
+#test func_4
+    char *str;
+    str = "atan(0.2)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.197396, S21_EPS);
+
+
+#test func_5
+    char *str;
+    str = "acos(0.2043)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 1.365048, S21_EPS);
+
+
+#test func_6
+    char *str;
+    str = "atan(0.0054)+543-sin(43*2)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 543.928858, S21_EPS);
+
+
+#test func_7
+    char *str;
+    str = "(sin(123)-43*cos(321)^2)/2^tan(93)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -249.186284, S21_EPS);
+
+#test func_8
+    char *str;
+    str = "log(23)/log(925)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.459091, S21_EPS);
+
+#test func_9
+    char *str;
+    str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
+
+#test func_10
+    char *str;
+    str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
+
+#test func_11
+    char *str;
+    str = "ln(32)-0.2314983/2=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 3.349987, S21_EPS);
+
+#test func_12
+    char *str;
+    str = "sqrt(124-54+3)/sqrt(187)/asin(0.9)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.557971, S21_EPS);
+
+#test func_13
+    char *str;
+    str = "sqrt(+3)=";
+    double x = 0.0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 1.732051, S21_EPS);
+
+
+
+#test x_1
+    char *str;
+    str = "127*x/(sin(12))=";
+    double x = 0.0001;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -0.023669, S21_EPS);
+
+
+#test x_2
+    char *str;
+    str = "12*sqrt(x)=";
+    double x = 23;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 57.549978, S21_EPS);
+
+#test x_3
+    char *str;
+    str = "(0.432*54.2/x^2-(-8*x))*0.02=";
+    double x = 2.43;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.468105, S21_EPS);
+
+#test x_4
+    char *str;
+    str = "x*x^2/x*x^4/(23*xmod2+13.9654302)/cos(x^5)=";
+    double x = 4;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 297.052292, S21_EPS);
+
+#test x_5
+    char *str;
+    str = "20.954*0.01/sin(x)+32-(-x-43.7*0.3)/3/sqrt(x^2)=";
+    double x = 6;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 32.311744, S21_EPS);
+
+#test x_6
+    char *str;
+    str = "(6243645.4234/124.980*x-231435-(+432-2.76))*0.000001=";
+    double x = 3.293;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -0.067355, S21_EPS);
+
+#test x_7
+    char *str;
+    str = "-sin(x)-cos(x^3)/x-((-x^3)*1/x)*47.03+(-x/2)=";
+    double x = 3;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 421.726260, S21_EPS);
+
+#test x_8
+    char *str;
+    str = "1.4/x*(x^6-2)=";
+    double x = 14;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 752953.4, S21_EPS);
+
+#test x_9
+    char *str;
+    str = "log(x-5)*31/ln(x)/sin(127*x)=";
+    double x = 14;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, -79.513796, S21_EPS);
+
+
+
+#test error_1
+    char *str;
+    str = "1.1.=";
+    double x = 14;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test error_2
+    char *str;
+    str = "=";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test error_3
+    char *str;
+    str = ".=";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test error_4
+    char *str;
+    str = "sin(-24)*314/0=";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_int_eq((int)res, (int)-INFINITY);
+
+#test error_5
+    char *str;
+    str = "";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test error_6
+    char *str;
+    str = "=====";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+#test error_7
+    char *str;
+    str = "921+(21=";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+
+#test error_8
+    char *str;
+    str = "())((=";
+    double x = 0;
+    double res = startCalc(str, x);
+    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
+
+
+
