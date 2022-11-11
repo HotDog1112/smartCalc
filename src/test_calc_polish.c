@@ -4,607 +4,640 @@
  */
 
 #include <check.h>
-
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
+
 #include "s21_calc_polish.h"
-#include <limits.h>
 
-
-
-START_TEST(arif_1)
-{
-    char *str;
-    str = "10+20+30-21=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 39.0, S21_EPS);
-
-
+START_TEST(arif_1) {
+  char *str;
+  str = "10+20+30-21=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 39.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_2)
-{
-    char *str;
-    str = "-12323-(30-0.0)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -12353, S21_EPS);
-
+START_TEST(arif_2) {
+  char *str;
+  str = "-12323-(30-0.0)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -12353, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_3)
-{
-    char *str;
-    str = "12+54-321/32-(21-2)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 36.96875, S21_EPS);
-
-
+START_TEST(arif_3) {
+  char *str;
+  str = "12+54-321/32-(21-2)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 36.96875, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_4)
-{
-    char *str;
-    str = "1.54-323.00/3 + 234*(-21-3)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -5722.126667, S21_EPS);
-
+START_TEST(arif_4) {
+  char *str;
+  str = "1.54-323.00/3 + 234*(-21-3)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -5722.126667, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_5)
-{
-    char *str;
-    str = "231-432/0=";
-    double x = 0.0;
-    ck_assert_int_eq((int)startCalc(str, x), (int)-INFINITY);
-
-
+START_TEST(arif_5) {
+  char *str;
+  str = "231-432/0=";
+  double x = 0.0;
+  ck_assert_int_eq((int)startCalc(str, x), (int)-INFINITY);
 }
 END_TEST
 
-START_TEST(arif_6)
-{
-    char *str;
-    str = "1*2/3*4/5*6/7*9/10=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.411429, S21_EPS);
-
+START_TEST(arif_6) {
+  char *str;
+  str = "1*2/3*4/5*6/7*9/10=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.411429, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_7)
-{
-    char *str;
-    str = "43232/6653-214-(-323+0.0002)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 115.497921, S21_EPS);
-
-
+START_TEST(arif_7) {
+  char *str;
+  str = "43232/6653-214-(-323+0.0002)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 115.497921, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_8)
-{
-    char *str;
-    str = "231-43mod42+0.54-(-32*3.213)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 333.356, S21_EPS);
-
+START_TEST(arif_8) {
+  char *str;
+  str = "231-43mod42+0.54-(-32*3.213)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 333.356, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_9)
-{
-    char *str;
-    str = "11-(123124.0001+(42-32.327)-32)*423/432=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -120526.054910, S21_EPS);
-
+START_TEST(arif_9) {
+  char *str;
+  str = "11-(123124.0001+(42-32.327)-32)*423/432=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -120526.054910, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_10)
-{
-    char *str;
-    str = "32mod(32-30)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
-
+START_TEST(arif_10) {
+  char *str;
+  str = "32mod(32-30)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_11)
-{
-    char *str;
-    str = "12-32*(2143-312*(4-5)-1.32/(83.2/3))=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -78546.476923, S21_EPS);
-
-
+START_TEST(arif_11) {
+  char *str;
+  str = "12-32*(2143-312*(4-5)-1.32/(83.2/3))=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -78546.476923, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_12)
-{
-    char *str;
-    str = "511*0+(-32.02)-(-43)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 10.980000, S21_EPS);
-
+START_TEST(arif_12) {
+  char *str;
+  str = "511*0+(-32.02)-(-43)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 10.980000, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_13)
-{
-    char *str;
-    str = "0+0-0*0-0.02=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -0.020000, S21_EPS);
-
+START_TEST(arif_13) {
+  char *str;
+  str = "0+0-0*0-0.02=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -0.020000, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_14)
-{
-    char *str;
-    str = "3+43.3.2=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(arif_14) {
+  char *str;
+  str = "3+43.3.2=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_15)
-{
-    char *str;
-    str = "3^9-4^(-2)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 19682.9375, S21_EPS);
-
+START_TEST(arif_15) {
+  char *str;
+  str = "3^9-4^(-2)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 19682.9375, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_16)
-{
-    char *str;
-    str = "(0.2=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(arif_16) {
+  char *str;
+  str = "(0.2=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(arif_17)
-{
-    char *str;
-    str = "(3-43^3-(-3*5))/54^0.001=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -79172.551221, S21_EPS);
-
+START_TEST(arif_17) {
+  char *str;
+  str = "(3-43^3-(-3*5))/54^0.001=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -79172.551221, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_1)
-{
-    char *str;
-    str = "sin(2+43)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.850904, S21_EPS);
-
+START_TEST(func_1) {
+  char *str;
+  str = "sin(2+43)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.850904, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_2)
-{
-    char *str;
-    str = "cos(34-23)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.004426, S21_EPS);
-
+START_TEST(func_2) {
+  char *str;
+  str = "cos(34-23)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.004426, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_3)
-{
-    char *str;
-    str = "tan(89)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 1.685825, S21_EPS);
-
+START_TEST(func_3) {
+  char *str;
+  str = "tan(89)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 1.685825, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_4)
-{
-    char *str;
-    str = "atan(0.2)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.197396, S21_EPS);
-
-
+START_TEST(func_4) {
+  char *str;
+  str = "atan(0.2)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.197396, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_5)
-{
-    char *str;
-    str = "acos(0.2043)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 1.365048, S21_EPS);
-
-
+START_TEST(func_5) {
+  char *str;
+  str = "acos(0.2043)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 1.365048, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_6)
-{
-    char *str;
-    str = "atan(0.0054)+543-sin(43*2)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 543.928858, S21_EPS);
-
-
+START_TEST(func_6) {
+  char *str;
+  str = "atan(0.0054)+543-sin(43*2)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 543.928858, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_7)
-{
-    char *str;
-    str = "(sin(123)-43*cos(321)^2)/2^tan(93)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -249.186284, S21_EPS);
-
+START_TEST(func_7) {
+  char *str;
+  str = "(sin(123)-43*cos(321)^2)/2^tan(93)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -249.186284, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_8)
-{
-    char *str;
-    str = "log(23)/log(925)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.459091, S21_EPS);
-
+START_TEST(func_8) {
+  char *str;
+  str = "log(23)/log(925)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.459091, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_9)
-{
-    char *str;
-    str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
-
+START_TEST(func_9) {
+  char *str;
+  str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_10)
-{
-    char *str;
-    str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
-
+START_TEST(func_10) {
+  char *str;
+  str = "sin(32*4-(-31+50))/tan(1)-0*(91+4)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.524424, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_11)
-{
-    char *str;
-    str = "ln(32)-0.2314983/2=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 3.349987, S21_EPS);
-
+START_TEST(func_11) {
+  char *str;
+  str = "ln(32)-0.2314983/2=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 3.349987, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_12)
-{
-    char *str;
-    str = "sqrt(124-54+3)/sqrt(187)/asin(0.9)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.557971, S21_EPS);
-
+START_TEST(func_12) {
+  char *str;
+  str = "sqrt(124-54+3)/sqrt(187)/asin(0.9)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.557971, S21_EPS);
 }
 END_TEST
 
-START_TEST(func_13)
-{
-    char *str;
-    str = "sqrt(+3)=";
-    double x = 0.0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 1.732051, S21_EPS);
-
-
-
+START_TEST(func_13) {
+  char *str;
+  str = "sqrt(+3)=";
+  double x = 0.0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 1.732051, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_1)
-{
-    char *str;
-    str = "127*x/(sin(12))=";
-    double x = 0.0001;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -0.023669, S21_EPS);
-
-
+START_TEST(x_1) {
+  char *str;
+  str = "127*x/(sin(12))=";
+  double x = 0.0001;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -0.023669, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_2)
-{
-    char *str;
-    str = "12*sqrt(x)=";
-    double x = 23;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 57.549978, S21_EPS);
-
+START_TEST(x_2) {
+  char *str;
+  str = "12*sqrt(x)=";
+  double x = 23;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 57.549978, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_3)
-{
-    char *str;
-    str = "(0.432*54.2/x^2-(-8*x))*0.02=";
-    double x = 2.43;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.468105, S21_EPS);
-
+START_TEST(x_3) {
+  char *str;
+  str = "(0.432*54.2/x^2-(-8*x))*0.02=";
+  double x = 2.43;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.468105, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_4)
-{
-    char *str;
-    str = "x*x^2/x*x^4/(23*xmod2+13.9654302)/cos(x^5)=";
-    double x = 4;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 297.052292, S21_EPS);
-
+START_TEST(x_4) {
+  char *str;
+  str = "x*x^2/x*x^4/(23*xmod2+13.9654302)/cos(x^5)=";
+  double x = 4;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 297.052292, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_5)
-{
-    char *str;
-    str = "20.954*0.01/sin(x)+32-(-x-43.7*0.3)/3/sqrt(x^2)=";
-    double x = 6;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 32.311744, S21_EPS);
-
+START_TEST(x_5) {
+  char *str;
+  str = "20.954*0.01/sin(x)+32-(-x-43.7*0.3)/3/sqrt(x^2)=";
+  double x = 6;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 32.311744, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_6)
-{
-    char *str;
-    str = "(6243645.4234/124.980*x-231435-(+432-2.76))*0.000001=";
-    double x = 3.293;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -0.067355, S21_EPS);
-
+START_TEST(x_6) {
+  char *str;
+  str = "(6243645.4234/124.980*x-231435-(+432-2.76))*0.000001=";
+  double x = 3.293;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -0.067355, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_7)
-{
-    char *str;
-    str = "-sin(x)-cos(x^3)/x-((-x^3)*1/x)*47.03+(-x/2)=";
-    double x = 3;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 421.726260, S21_EPS);
-
+START_TEST(x_7) {
+  char *str;
+  str = "-sin(x)-cos(x^3)/x-((-x^3)*1/x)*47.03+(-x/2)=";
+  double x = 3;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 421.726260, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_8)
-{
-    char *str;
-    str = "1.4/x*(x^6-2)=";
-    double x = 14;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 752953.4, S21_EPS);
-
+START_TEST(x_8) {
+  char *str;
+  str = "1.4/x*(x^6-2)=";
+  double x = 14;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 752953.4, S21_EPS);
 }
 END_TEST
 
-START_TEST(x_9)
-{
-    char *str;
-    str = "log(x-5)*31/ln(x)/sin(127*x)=";
-    double x = 14;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, -79.513796, S21_EPS);
-
-
-
+START_TEST(x_9) {
+  char *str;
+  str = "log(x-5)*31/ln(x)/sin(127*x)=";
+  double x = 14;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, -79.513796, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_1)
-{
-    char *str;
-    str = "1.1.=";
-    double x = 14;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(error_1) {
+  char *str;
+  str = "1.1.=";
+  double x = 14;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_2)
-{
-    char *str;
-    str = "=";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(error_2) {
+  char *str;
+  str = "=";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_3)
-{
-    char *str;
-    str = ".=";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(error_3) {
+  char *str;
+  str = ".=";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_4)
-{
-    char *str;
-    str = "sin(-24)*314/0=";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_int_eq((int)res, (int)-INFINITY);
-
+START_TEST(error_4) {
+  char *str;
+  str = "sin(-24)*314/0=";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_int_eq((int)res, (int)-INFINITY);
 }
 END_TEST
 
-START_TEST(error_5)
-{
-    char *str;
-    str = "";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(error_5) {
+  char *str;
+  str = "";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_6)
-{
-    char *str;
-    str = "=====";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
+START_TEST(error_6) {
+  char *str;
+  str = "=====";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_7)
-{
-    char *str;
-    str = "921+(21=";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
-
+START_TEST(error_7) {
+  char *str;
+  str = "921+(21=";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-START_TEST(error_8)
-{
-    char *str;
-    str = "())((=";
-    double x = 0;
-    double res = startCalc(str, x);
-    ck_assert_double_eq_tol(res, 0.0, S21_EPS);
-
-
-
+START_TEST(error_8) {
+  char *str;
+  str = "())((=";
+  double x = 0;
+  double res = startCalc(str, x);
+  ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 }
 END_TEST
 
-int main(void)
-{
-    Suite *s1 = suite_create("Core");
-    TCase *tc1_1 = tcase_create("Core");
-    SRunner *sr = srunner_create(s1);
-    int nf;
+START_TEST(deposit_1) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 1;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents,
+                  &tax_pay, &total);
+  double res_percents = 10000, res_tax = 0, res_total = 100000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
 
-    suite_add_tcase(s1, tc1_1);
-    tcase_add_test(tc1_1, arif_1);
-    tcase_add_test(tc1_1, arif_2);
-    tcase_add_test(tc1_1, arif_3);
-    tcase_add_test(tc1_1, arif_4);
-    tcase_add_test(tc1_1, arif_5);
-    tcase_add_test(tc1_1, arif_6);
-    tcase_add_test(tc1_1, arif_7);
-    tcase_add_test(tc1_1, arif_8);
-    tcase_add_test(tc1_1, arif_9);
-    tcase_add_test(tc1_1, arif_10);
-    tcase_add_test(tc1_1, arif_11);
-    tcase_add_test(tc1_1, arif_12);
-    tcase_add_test(tc1_1, arif_13);
-    tcase_add_test(tc1_1, arif_14);
-    tcase_add_test(tc1_1, arif_15);
-    tcase_add_test(tc1_1, arif_16);
-    tcase_add_test(tc1_1, arif_17);
-    tcase_add_test(tc1_1, func_1);
-    tcase_add_test(tc1_1, func_2);
-    tcase_add_test(tc1_1, func_3);
-    tcase_add_test(tc1_1, func_4);
-    tcase_add_test(tc1_1, func_5);
-    tcase_add_test(tc1_1, func_6);
-    tcase_add_test(tc1_1, func_7);
-    tcase_add_test(tc1_1, func_8);
-    tcase_add_test(tc1_1, func_9);
-    tcase_add_test(tc1_1, func_10);
-    tcase_add_test(tc1_1, func_11);
-    tcase_add_test(tc1_1, func_12);
-    tcase_add_test(tc1_1, func_13);
-    tcase_add_test(tc1_1, x_1);
-    tcase_add_test(tc1_1, x_2);
-    tcase_add_test(tc1_1, x_3);
-    tcase_add_test(tc1_1, x_4);
-    tcase_add_test(tc1_1, x_5);
-    tcase_add_test(tc1_1, x_6);
-    tcase_add_test(tc1_1, x_7);
-    tcase_add_test(tc1_1, x_8);
-    tcase_add_test(tc1_1, x_9);
-    tcase_add_test(tc1_1, error_1);
-    tcase_add_test(tc1_1, error_2);
-    tcase_add_test(tc1_1, error_3);
-    tcase_add_test(tc1_1, error_4);
-    tcase_add_test(tc1_1, error_5);
-    tcase_add_test(tc1_1, error_6);
-    tcase_add_test(tc1_1, error_7);
-    tcase_add_test(tc1_1, error_8);
+START_TEST(deposit_2) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 2;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents,
+                  &tax_pay, &total);
+  double res_percents = 10000, res_tax = 0, res_total = 100000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
 
-    srunner_run_all(sr, CK_ENV);
-    nf = srunner_ntests_failed(sr);
-    srunner_free(sr);
+START_TEST(deposit_3) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 3;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents,
+                  &tax_pay, &total);
+  double res_percents = 10000, res_tax = 0, res_total = 100000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
 
-    return nf == 0 ? 0 : 1;
+START_TEST(deposit_4) {
+  double dep_amount = 1000000;
+  int term = 24;
+  double rate = 15;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 3;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 1, "", "", &percents,
+                  &tax_pay, &total);
+  double res_percents = 322500, res_tax = 22425, res_total = 1322500;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+START_TEST(deposit_5) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 3;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000", "4:1000",
+                  &percents, &tax_pay, &total);
+  double res_percents = 10000, res_tax = 0, res_total = 100000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+START_TEST(deposit_1_err) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 3;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000", "4:1000",
+                  &percents, &tax_pay, &total);
+  double res_percents = 10000, res_tax = 0, res_total = 100000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+START_TEST(deposit_2_err) {
+  double dep_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double tax = 0;
+  double percents = 0, tax_pay = 0, total = 0;
+  int type_pay = 3;
+  takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000",
+                  "4:1000000", &percents, &tax_pay, &total);
+  double res_percents = 10100, res_tax = 0, res_total = 101000;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(tax_pay, res_tax);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+START_TEST(credit_1) {
+  double cr_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double percents = 0, in_mounth = 0, total = 0;
+  takeCreditInfo(cr_amount, term, rate, 1, &in_mounth, &total, &percents, 12);
+  double res_percents = 5499.064676, m = 8791.588723, res_total = 105499.064676;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(in_mounth, m);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+START_TEST(credit_2) {
+  double cr_amount = 100000;
+  int term = 12;
+  double rate = 10;
+  double percents = 0, in_mounth = 0, total = 0;
+  takeCreditInfo(cr_amount, term, rate, 2, &in_mounth, &total, &percents, 5);
+  double res_percents = 5415.525114, m = 8844.748858, res_total = 105415.525114;
+  ck_assert_float_eq(percents, res_percents);
+  ck_assert_float_eq(in_mounth, m);
+  ck_assert_float_eq(total, res_total);
+}
+END_TEST
+
+int main(void) {
+  Suite *s1 = suite_create("Core");
+  TCase *tc1_1 = tcase_create("Core");
+  SRunner *sr = srunner_create(s1);
+  int nf;
+
+  suite_add_tcase(s1, tc1_1);
+  tcase_add_test(tc1_1, arif_1);
+  tcase_add_test(tc1_1, arif_2);
+  tcase_add_test(tc1_1, arif_3);
+  tcase_add_test(tc1_1, arif_4);
+  tcase_add_test(tc1_1, arif_5);
+  tcase_add_test(tc1_1, arif_6);
+  tcase_add_test(tc1_1, arif_7);
+  tcase_add_test(tc1_1, arif_8);
+  tcase_add_test(tc1_1, arif_9);
+  tcase_add_test(tc1_1, arif_10);
+  tcase_add_test(tc1_1, arif_11);
+  tcase_add_test(tc1_1, arif_12);
+  tcase_add_test(tc1_1, arif_13);
+  tcase_add_test(tc1_1, arif_14);
+  tcase_add_test(tc1_1, arif_15);
+  tcase_add_test(tc1_1, arif_16);
+  tcase_add_test(tc1_1, arif_17);
+  tcase_add_test(tc1_1, func_1);
+  tcase_add_test(tc1_1, func_2);
+  tcase_add_test(tc1_1, func_3);
+  tcase_add_test(tc1_1, func_4);
+  tcase_add_test(tc1_1, func_5);
+  tcase_add_test(tc1_1, func_6);
+  tcase_add_test(tc1_1, func_7);
+  tcase_add_test(tc1_1, func_8);
+  tcase_add_test(tc1_1, func_9);
+  tcase_add_test(tc1_1, func_10);
+  tcase_add_test(tc1_1, func_11);
+  tcase_add_test(tc1_1, func_12);
+  tcase_add_test(tc1_1, func_13);
+  tcase_add_test(tc1_1, x_1);
+  tcase_add_test(tc1_1, x_2);
+  tcase_add_test(tc1_1, x_3);
+  tcase_add_test(tc1_1, x_4);
+  tcase_add_test(tc1_1, x_5);
+  tcase_add_test(tc1_1, x_6);
+  tcase_add_test(tc1_1, x_7);
+  tcase_add_test(tc1_1, x_8);
+  tcase_add_test(tc1_1, x_9);
+  tcase_add_test(tc1_1, error_1);
+  tcase_add_test(tc1_1, error_2);
+  tcase_add_test(tc1_1, error_3);
+  tcase_add_test(tc1_1, error_4);
+  tcase_add_test(tc1_1, error_5);
+  tcase_add_test(tc1_1, error_6);
+  tcase_add_test(tc1_1, error_7);
+  tcase_add_test(tc1_1, error_8);
+  tcase_add_test(tc1_1, deposit_1);
+  tcase_add_test(tc1_1, deposit_2);
+  tcase_add_test(tc1_1, deposit_3);
+  tcase_add_test(tc1_1, deposit_4);
+  tcase_add_test(tc1_1, deposit_5);
+  tcase_add_test(tc1_1, deposit_1_err);
+  tcase_add_test(tc1_1, deposit_2_err);
+  tcase_add_test(tc1_1, credit_1);
+  tcase_add_test(tc1_1, credit_2);
+
+  srunner_run_all(sr, CK_ENV);
+  nf = srunner_ntests_failed(sr);
+  srunner_free(sr);
+
+  return nf == 0 ? 0 : 1;
 }

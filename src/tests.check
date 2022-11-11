@@ -349,5 +349,123 @@
     double res = startCalc(str, x);
     ck_assert_double_eq_tol(res, 0.0, S21_EPS);
 
+#test deposit_1
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 1;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents, &tax_pay, &total);
+double res_percents = 10000, res_tax = 0, res_total = 100000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
 
 
+#test deposit_2
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0; 
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 2;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents, &tax_pay, &total);
+double res_percents = 10000, res_tax = 0, res_total = 100000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+#test deposit_3
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 3;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "", "", &percents, &tax_pay, &total);
+double res_percents = 10000, res_tax = 0, res_total = 100000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+#test deposit_4
+double dep_amount = 1000000;
+int term = 24;
+double rate = 15;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 3;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 1, "", "", &percents, &tax_pay, &total);
+double res_percents = 322500, res_tax = 22425, res_total = 1322500;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+#test deposit_5
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 3;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000", "4:1000", &percents, &tax_pay, &total);
+double res_percents = 10000, res_tax = 0, res_total = 100000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+
+
+#test deposit_1_err
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 3;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000", "4:1000", &percents, &tax_pay, &total);
+double res_percents = 10000, res_tax = 0, res_total = 100000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+#test deposit_2_err
+double dep_amount = 100000;
+int term = 12;
+double rate = 10;
+double tax = 0;
+double percents = 0, tax_pay = 0, total = 0;
+int type_pay = 3;
+takeDepositInfo(dep_amount, term, rate, tax, type_pay, 0, "1:1000", "4:1000000", &percents, &tax_pay, &total);
+double res_percents = 10100, res_tax = 0, res_total = 101000;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(tax_pay, res_tax);
+    ck_assert_float_eq(total, res_total);
+
+
+#test credit_1
+double cr_amount = 100000;
+int term = 12;
+double rate = 10;
+double percents = 0, in_mounth = 0, total = 0;
+takeCreditInfo(cr_amount, term, rate, 1,
+                   &in_mounth, &total,
+                   &percents, 12);
+double res_percents = 5499.064676, m = 8791.588723, res_total = 105499.064676;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(in_mounth, m);
+    ck_assert_float_eq(total, res_total);
+
+#test credit_2
+double cr_amount = 100000;
+int term = 12;
+double rate = 10;
+double percents = 0, in_mounth = 0, total = 0;
+takeCreditInfo(cr_amount, term, rate, 2,
+                   &in_mounth, &total,
+                   &percents, 5);
+double res_percents =  5415.525114, m =8844.748858, res_total = 105415.525114;
+    ck_assert_float_eq(percents, res_percents);
+    ck_assert_float_eq(in_mounth, m);
+    ck_assert_float_eq(total, res_total);

@@ -1,6 +1,7 @@
 #ifndef S21_CALC_POLISH_H
 #define S21_CALC_POLISH_H
 
+#include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,5 +69,17 @@ int creditAnn_Calc(double credit_amount, int term, double rate,
                    double* overpayment);
 int getYearDays(int year);
 int getDaysInMounth(int mounth);
+
+//_______DEPOSIT__________//
+int takeDepositInfo(double deposit_amount, double term, double rate, double tax,
+                    int payments_periodicity, int capitalization,
+                    char* replenishment_list, char* withdrawals_list,
+                    double* percents, double* tax_sum, double* amount);
+int depositCalc(double deposit_amount, double term, double rate,
+                int payments_period, double* percents, double* amount,
+                char* replenishment_list, char* withdrawals_list,
+                int is_capitalization);
+double whatTypeOfPeriod(int payments_periodicity);
+double taxCalc(double* percents, double* tax_sum, double tax, int mounths);
 
 #endif  //  S21_CALC_POLISH_H
